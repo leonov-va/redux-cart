@@ -1,47 +1,66 @@
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
+import { connect } from "react-redux";
 import * as actions from "../../store/actions/products";
 import "./index.css";
 
-export default function Products() {
-  const dispatch = useDispatch();
-  const products = useSelector((store) => store.products.items);
+class Products extends React.Component {
+  constructor(props) {
+    super(props);
 
-  const onAdd = (event) => {
+    this.onRemove = this.onRemove.bind(this);
+    this.onAdd = this.onAdd.bind(this);
+  }
+
+  onRemove(event) {
     const { id } = event.target.dataset;
-
-    dispatch(actions.addProduct({ id }));
-  };
-
-  const onRemove = (event) => {
-    const { id } = event.target.dataset;
-    const product = products.find((product) => product.id === id);
+    const product = this.props.products.find((product) => product.id === id);
 
     if (product.count >= 1) {
-      dispatch(actions.removeProduct({ id }));
+      this.props.removeProduct({ id });
     }
-  };
+  }
 
-  return (
-    <div className="products">
-      <h1>Продукты</h1>
-      {products.map((product) => (
-        <div className="product" key={product.name}>
-          <div className="product__name">
-            {product.name} - ${product.price}
-          </div>
-          <div className="product__buttons-wrapper">
-            <button data-id={product.id} onClick={onRemove}>
-              -
-            </button>
-            <div>
-              <span>{product.count || ""}</span>
+  onAdd(event) {
+    const { id } = event.target.dataset;
+    this.props.addProduct({ id });
+  }
+
+  render() {
+    return (
+      <div className="products">
+        <h1>Продукты</h1>
+        {this.props.products.map((product) => (
+          <div className="product" key={product.name}>
+            <div className="product__name">
+              {product.name} - ${product.price}
             </div>
-            <button data-id={product.id} onClick={onAdd}>
-              +
-            </button>
+            <div className="product__buttons-wrapper">
+              <button data-id={product.id} onClick={this.onRemove}>
+                -
+              </button>
+              <div>
+                <span>{product.count || ""}</span>
+              </div>
+              <button data-id={product.id} onClick={this.onAdd}>
+                +
+              </button>
+            </div>
           </div>
-        </div>
-      ))}
-    </div>
-  );
+        ))}
+      </div>
+    );
+  }
 }
+
+// Первым параметром вызывается функция, которая должна вернуть объект состояния.
+// Каждое свойство объекта состояния будет доступно через this.props.
+// Поэтому в примере выше на 32 строке мы получаем доступ к продуктам с помощью this.props.products.
+// -
+// Вторым параметром передаются объект экшенов.
+// Каждый из этих экшенов будет обернут в функцию dispatch.
+// Поэтому в примере выше на 25 строке мы просто вызыва ем Action creator без оборачивания в dispatch.
+export default connect((store) => {
+  return {
+    products: store.products.items,
+  };
+}, actions)(Products);
