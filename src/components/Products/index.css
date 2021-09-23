@@ -1,0 +1,43 @@
+.product {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.product__name {
+  font-size: 30px;
+  font-weight: 300;
+}
+
+.product__buttons-wrapper {
+  display: flex;
+  align-items: center;
+  border-radius: 40px;
+  height: 40px;
+  overflow: hidden;
+  min-width: 110px;
+}
+
+.product__buttons-wrapper button {
+  background: #7045ff;
+  width: 100%;
+  outline: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  height: 100%;
+  font-weight: 300;
+}
+
+.product__buttons-wrapper div {
+  background: #7045ff;
+  min-width: 40px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
