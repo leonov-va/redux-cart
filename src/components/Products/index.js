@@ -1,17 +1,15 @@
 import { useDispatch, useSelector } from "react-redux";
+import * as actions from "../../store/actions/products";
 import "./index.css";
 
 export default function Products() {
   const dispatch = useDispatch();
-  const products = useSelector((store) => store.items);
+  const products = useSelector((store) => store.products.items);
 
   const onAdd = (event) => {
     const { id } = event.target.dataset;
 
-    dispatch({
-      type: "Добавить продукт",
-      payload: { id },
-    });
+    dispatch(actions.addProduct({ id }));
   };
 
   const onRemove = (event) => {
@@ -19,10 +17,7 @@ export default function Products() {
     const product = products.find((product) => product.id === id);
 
     if (product.count >= 1) {
-      dispatch({
-        type: "Убрать продукт",
-        payload: { id },
-      });
+      dispatch(actions.removeProduct({ id }));
     }
   };
 
